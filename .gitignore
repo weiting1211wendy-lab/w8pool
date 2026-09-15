@@ -1,0 +1,65 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+.env
+.env.*
+!.env.example
+.dev.vars
+.wrangler/
+wrangler.jsonc
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Local review / generated artifacts
+.ppt-*/
+.resume-review/
+.tmp-*/
+resume-review-render/
+ppt_build/
+W8pool/
+w8pool coding/
+六大业务流程_可编辑/
+*.inspect.ndjson
+*.tar.gz
+
+# Personal documents and presentation drafts
+*.pptx
+*.docx
+*.pdf
+*.xlsx
+*.xls
+
+# Exported backups / local private data
+*backup*.json
+*备份*.json
+w8pool-backup-*.json
+wendy*.json
+
+# Local Windows helpers / app icons
+*.cmd
+*.ico
+
+# Root-level portfolio helper images
+/W8Pool-网站入口二维码.png
+
+# Internal agent briefs
+CODEX_UI_BRIEF.md

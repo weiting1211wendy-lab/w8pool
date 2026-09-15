@@ -1,0 +1,13 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "w8-pool",
+  "pages_build_output_dir": "./dist",
+  "compatibility_date": "2026-08-21",
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "w8-pool",
+      "database_id": "YOUR_D1_DATABASE_ID"
+    }
+  ]
+}
