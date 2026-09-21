@@ -180,8 +180,6 @@ export default function DailyAchievementCard() {
     })
     return map
   }, [tasks])
-  const canGoNext = calendarMonth.year < todayObj.getFullYear() || (calendarMonth.year === todayObj.getFullYear() && calendarMonth.month < todayObj.getMonth())
-
   const filteredDetails = useMemo(() => {
     if (!expandedType) return []
     return details.filter((d) => {
@@ -288,6 +286,15 @@ export default function DailyAchievementCard() {
       }
       return
     }
+    if (selectedDate > todayDateStr) {
+      setLoading(false)
+      setExpandedType(null)
+      setShowAllBoardItems(isMobileBoard)
+      setSummary({ addedJobs: 0, importedJobs: 0, sharedJobs: 0, screeningActions: 0, progressUpdates: 0, completedTasks: 0, noteOrTagUpdates: 0, totalActions: 0 })
+      setDetails([])
+      setDetailLimitedMessage('')
+      return
+    }
     const { startAt, endAt } = getDayRange(selectedDate)
     setLoading(true)
     setExpandedType(null)
@@ -298,21 +305,20 @@ export default function DailyAchievementCard() {
       .then((data) => { setSummary(data.summary); setDetails(data.details); setDetailLimitedMessage(data.detailLimited ? (data.message ?? '该日期已超过 30 天，仅保留成就汇总，不再展示详细条目。') : '') })
       .catch(() => { setSummary(null); setDetails([]); setDetailLimitedMessage('') })
       .finally(() => setLoading(false))
-  }, [mode, selectedDate, todayStr])
+  }, [isMobileBoard, mode, selectedDate, todayDateStr, todayStr])
 
   const renderCalendar = () => (
     <>
       <div className="cal-header">
         <button type="button" className="cal-nav" onClick={() => setCalendarMonth((p) => ({ year: p.month === 0 ? p.year - 1 : p.year, month: p.month === 0 ? 11 : p.month - 1 }))}>←</button>
         <span className="cal-month">{monthLabel}</span>
-        <button type="button" className="cal-nav" disabled={!canGoNext} onClick={() => setCalendarMonth((p) => ({ year: p.month === 11 ? p.year + 1 : p.year, month: p.month === 11 ? 0 : p.month + 1 }))}>→</button>
+        <button type="button" className="cal-nav" onClick={() => setCalendarMonth((p) => ({ year: p.month === 11 ? p.year + 1 : p.year, month: p.month === 11 ? 0 : p.month + 1 }))}>→</button>
       </div>
       <div className="cal-weekdays">{WEEKDAYS.map((w) => <span key={w}>{w}</span>)}</div>
       <div className="cal-grid">
         {grid.map((day, i) => {
           if (day === null) return <span key={`e${i}`} className="cal-cell cal-empty" />
           const dateStr = formatDate(calendarMonth.year, calendarMonth.month, day)
-          const isFuture = dateStr > todayDateStr
           const isSelected = dateStr === selectedDate
           const isToday = dateStr === todayDateStr
           const dayData = calendarDayMap.get(dateStr)
@@ -323,8 +329,7 @@ export default function DailyAchievementCard() {
             <button
               key={dateStr}
               type="button"
-              className={`cal-cell${isSelected ? ' cal-selected' : ''}${isToday ? ' cal-today' : ''}${isFuture ? ' cal-disabled' : ''}${hasDot ? ' cal-has-data' : ''}${hasPendingSchedule ? ' cal-has-pending' : ''}`}
-              disabled={isFuture}
+              className={`cal-cell${isSelected ? ' cal-selected' : ''}${isToday ? ' cal-today' : ''}${hasDot ? ' cal-has-data' : ''}${hasPendingSchedule ? ' cal-has-pending' : ''}`}
               onClick={() => { setSelectedDate(dateStr); if (calModalOpen) setCalModalOpen(false) }}
             >
               {day}
